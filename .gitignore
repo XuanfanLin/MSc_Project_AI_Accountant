@@ -59,6 +59,6 @@ hf_*.json
 # 保留 requirements.txt
 !requirements.txt
 
-!data/put_data_here.txt
+!data/Put_uk_tax_synthetic_dataset.jsonl_data_here.txt
 
 !scripts/4.tpo2/output/Put_dpo_pairs_gpt_enhanced.jsonl_dataset_here.txt
