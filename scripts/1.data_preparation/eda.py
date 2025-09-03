@@ -13,7 +13,7 @@ DATA_FILE = Path("/home/zceexl3/ai_accountant/data/uk_tax_synthetic_dataset.json
 EDA_DIR = Path("/home/zceexl3/ai_accountant/scripts/1.data_preparation/eda")
 EDA_DIR.mkdir(parents=True, exist_ok=True)
 
-# 图形风格与全局字号
+# Plot style and global font size
 sns.set_theme(style="whitegrid")
 plt.rcParams.update({
     "figure.dpi": 120,
@@ -23,10 +23,10 @@ plt.rcParams.update({
     "ytick.labelsize": 10,
 })
 
-# 可调参数 —— 控制条形图密度
-TOP_K_FIRST_WORDS = 15          # 仅展示前 K 个首词
-MIN_FREQ_FIRST_WORD = 5         # 频次低于该阈值的忽略（可设为 1 关闭）
-CLIP_PCT = 99                   # 长度分布按百分位裁剪尾部，便于阅读（如 99 或 99.5）
+# Adjustable parameters — control density of bar plots
+TOP_K_FIRST_WORDS = 15          # Only display top K first words
+MIN_FREQ_FIRST_WORD = 5         # Ignore words with frequency below threshold (set to 1 to disable)
+CLIP_PCT = 99                   # Clip long tail of length distribution by percentile for readability (e.g., 99 or 99.5)
 
 # ==== Load Full Dataset ====
 with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -59,9 +59,9 @@ first_words = (
       .str.split().str[0].str.lower()
 )
 
-# 频次统计与过滤
+# Frequency count and filtering
 fw_counts = first_words.value_counts()
-fw_counts = fw_counts[fw_counts >= MIN_FREQ_FIRST_WORD]  # 过滤低频
+fw_counts = fw_counts[fw_counts >= MIN_FREQ_FIRST_WORD]  # Filter out low frequency
 total_covered = int(fw_counts.head(TOP_K_FIRST_WORDS).sum())
 coverage = total_covered / max(1, len(df)) * 100
 
@@ -72,18 +72,18 @@ print("\nTop first words (filtered):")
 print(first_words_df.head(10))
 
 # ==== Plot 1: Instruction vs. Output Length Distribution ====
-# 使用共享分箱（Freedman–Diaconis）+ 裁剪长尾，让直方图更清晰
+# Use shared bin edges (Freedman–Diaconis) + clip long tail for clearer histogram
 instr = df["instruction_len"].to_numpy()
 outp  = df["output_len"].to_numpy()
 
-# 长尾裁剪
+# Clip long tail
 i_clip = np.percentile(instr, CLIP_PCT)
 o_clip = np.percentile(outp,  CLIP_PCT)
 clip_max = max(i_clip, o_clip)
 instr_clipped = np.clip(instr, a_min=0, a_max=clip_max)
 outp_clipped  = np.clip(outp,  a_min=0, a_max=clip_max)
 
-# 共享分箱（fd 更稳健；若数据很少可改为 'auto'）
+# Shared bins ('fd' is more robust; use 'auto' if dataset is very small)
 bins = np.histogram_bin_edges(np.concatenate([instr_clipped, outp_clipped]), bins='fd')
 
 plt.figure(figsize=(10.5, 5.2))
@@ -98,7 +98,7 @@ plt.savefig(EDA_DIR / "length_distribution_instruction_vs_output.png", dpi=300)
 plt.close()
 
 # ==== Plot 2: Top-K First Words (Horizontal Bar, sorted) ====
-# 横向条形图 + 频次标注，避免密集挤在一起
+# Horizontal bar chart + frequency annotations, to avoid crowding
 plt.figure(figsize=(10.5, 6.0))
 sorted_df = first_words_df.sort_values("frequency", ascending=True)
 ax = sns.barplot(data=sorted_df, y="first_word", x="frequency")
@@ -106,7 +106,7 @@ plt.title(f"Top-{len(sorted_df)} Leading Words in Instructions "
           f"(≥{MIN_FREQ_FIRST_WORD} freq, covers {coverage:.1f}% of samples)")
 plt.xlabel("Frequency")
 plt.ylabel("First word")
-# 在条形图上标注频次
+# Annotate frequency on bars
 for p in ax.patches:
     w = p.get_width()
     y = p.get_y() + p.get_height()/2

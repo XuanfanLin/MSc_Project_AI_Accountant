@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "timestamp": "2025-09-01T15:29:54.502147Z",
+    "dataset": "/home/zceexl3/ai_accountant/data/test.jsonl",
+    "num_test_items": 100,
+    "base_model": "/home/zceexl3/ai_accountant/models/LLM-Research/Meta-Llama-3-8B",
+    "sft_adapter": "/home/zceexl3/ai_accountant/models/lora-sft/checkpoint-100",
+    "tpo_adapter": "/home/zceexl3/ai_accountant/models/dpo_1/checkpoint-500",
+    "tpo2_adapter": "/home/zceexl3/ai_accountant/models/dpo_2/adapter-final",
+    "judge": "gemini-2.0-flash (1–100 rubric, no reference)"
+  },
+  "base": {
+    "file": "/home/zceexl3/ai_accountant/scripts/overall_benchmark/base_scores.jsonl",
+    "num_scored": 100,
+    "avg_score": 32.72,
+    "min": 1,
+    "max": 100
+  },
+  "sft": {
+    "file": "/home/zceexl3/ai_accountant/scripts/overall_benchmark/sft_scores.jsonl",
+    "num_scored": 100,
+    "avg_score": 58.95,
+    "min": 20,
+    "max": 90
+  },
+  "tpo": {
+    "file": "/home/zceexl3/ai_accountant/scripts/overall_benchmark/tpo_scores.jsonl",
+    "num_scored": 100,
+    "avg_score": 58.55,
+    "min": 20,
+    "max": 95
+  },
+  "tpo2": {
+    "file": "/home/zceexl3/ai_accountant/scripts/overall_benchmarkscripts/overall_benchmark_58.55/tpo_scores.jsonl scripts/overall_benchmark_58.55/tpo_predictions.jsonl/tpo2_scores.jsonl",
+    "num_scored": 100,
+    "avg_score": 61.3,
+    "min": 20,
+    "max": 90
+  }
+}

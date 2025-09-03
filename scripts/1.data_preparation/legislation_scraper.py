@@ -5,39 +5,46 @@ import time
 import os
 import re
 
+# ==== Config ====
 HEADERS = {
     "User-Agent": "Mozilla/5.0"
 }
-URL_LIST_FILE = "urls/legislation_urls.txt"
-SAVE_PATH = "uk_tax_law_extraction/legislation_data.json"
+URL_LIST_FILE = "urls/legislation_urls.txt"                 # File containing list of legislation URLs
+SAVE_PATH = "uk_tax_law_extraction/legislation_data.json"   # Output JSON file to save results
 
 def clean_text(text):
+    """Normalize whitespace in extracted text."""
     return ' '.join(text.strip().split())
 
 def extract_section_title(soup):
+    """Extract the main section title from <h1> tag."""
     heading = soup.find("h1")
     if heading:
         return heading.get_text(strip=True)
     return "Unknown Title"
 
 def extract_section_number(url):
+    """Extract section number from URL (e.g., /section/12 -> Section 12)."""
     match = re.search(r'/section/(\d+)', url)
     return f"Section {match.group(1)}" if match else "Unknown Section"
 
 def extract_legislation_body(soup):
+    """Extract the main body text of the legislation, removing irrelevant notices."""
     law_text = []
     for tag in soup.select("div#content p, div#content li"):
         text = clean_text(tag.get_text())
-        # 跳过冗余法令更改说明、重复内容
+        
+        # Skip irrelevant boilerplate content
         if ("Changes to legislation" in text or
             "Revised legislation carried on this site" in text or
             "Back to top" in text or
             "Textual Amendments" in text):
             continue
-        if len(text) > 10:
+        
+        if len(text) > 10:  # Ignore very short lines
             law_text.append(text)
 
-    # 去重（避免重复条款被堆叠）
+    # Deduplicate lines while preserving order
     seen = set()
     unique_text = []
     for line in law_text:
@@ -48,6 +55,7 @@ def extract_legislation_body(soup):
     return " ".join(unique_text)
 
 def fetch_legislation_page(url):
+    """Fetch and parse a legislation page, returning structured data."""
     try:
         res = requests.get(url, headers=HEADERS, timeout=15)
         soup = BeautifulSoup(res.content, "html.parser")
@@ -56,7 +64,7 @@ def fetch_legislation_page(url):
         title = f"{section} – {extract_section_title(soup)}"
         content = extract_legislation_body(soup)
 
-        if len(content) < 100:
+        if len(content) < 100:   # Skip if body text is too short
             return None
 
         return {
@@ -70,9 +78,11 @@ def fetch_legislation_page(url):
         return None
 
 def main():
+    """Main pipeline: load URLs, fetch each page, save to JSON."""
     if not os.path.exists("output"):
         os.makedirs("output")
 
+    # Read URL list
     with open(URL_LIST_FILE, "r") as f:
         urls = [line.strip() for line in f if line.strip()]
 
@@ -84,8 +94,9 @@ def main():
             results.append(data)
         else:
             print(f"[SKIP] No valid legislation found at {url}")
-        time.sleep(0.5)
+        time.sleep(0.5)  # Polite delay to avoid hammering the server
 
+    # Save results
     with open(SAVE_PATH, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
 
