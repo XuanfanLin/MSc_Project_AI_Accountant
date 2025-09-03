@@ -28,10 +28,11 @@ All experiments were conducted on GPU servers provided by the UCL EEE Department
 ├── data/
 │   └── Put_uk_tax_synthetic_dataset.jsonl_data_here.txt   # dataset placeholder
 │
-├── models/                                                # fine-tuned 
-│   ├──lora-sft/
-│   ├──tpo_1/
-│   ├──tpo_2/
+├── models/ 
+│   ├──LLM-Rearch/Meta-Llama-3-8B                          # base model                   
+│   ├──lora-sft/                                           # sft adapter
+│   ├──tpo_1/                                              # tpo 1st round adapter
+│   ├──tpo_2/                                              # tpo 2nd round adapter
 │
 ├── scripts/
 │   ├── 1.data_preparation/                                # data preparation
