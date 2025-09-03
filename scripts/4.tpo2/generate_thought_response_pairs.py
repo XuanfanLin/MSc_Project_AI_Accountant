@@ -34,7 +34,7 @@ warnings.filterwarnings("ignore", message="networkx backend defined more than on
 
 # ===== Paths =====
 BASE_MODEL_PATH = "/home/zceexl3/ai_accountant/models/LLM-Research/Meta-Llama-3-8B"
-ADAPTER_PATH    = "/home/zceexl3/ai_accountant/models/dpo_1/checkpoint-500"  # or outputs path if needed
+ADAPTER_PATH    = "/home/zceexl3/ai_accountant/models/tpo_1/adapter-final"  # or outputs path if needed
 DATA_PATH       = Path("/home/zceexl3/ai_accountant/data/train.jsonl")
 
 OUTPUT_DIR = Path("/home/zceexl3/ai_accountant/scripts/tpo2/output")
