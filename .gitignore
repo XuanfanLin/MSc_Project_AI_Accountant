@@ -51,3 +51,14 @@ hf_*.json
 # IDE
 .vscode/
 .idea/
+
+
+# 保留特定 dataset 占位文件
+!scripts/4.tpo2/output/Put_dpo_pairs_gpt_enhanced.jsonl_dataset_here.txt
+
+# 保留 requirements.txt
+!requirements.txt
+
+!data/put_data_here.txt
+
+!scripts/4.tpo2/output/Put_dpo_pairs_gpt_enhanced.jsonl_dataset_here.txt
