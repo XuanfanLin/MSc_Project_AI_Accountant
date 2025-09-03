@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "timestamp": "2025-08-30T03:54:13.772745Z",
+    "dataset": "/home/zceexl3/ai_accountant/data/test.jsonl",
+    "num_test_items": 100,
+    "base_model": "/home/zceexl3/ai_accountant/models/LLM-Research/Meta-Llama-3-8B",
+    "sft_adapter": "/home/zceexl3/ai_accountant/models/lora-sft/checkpoint-100",
+    "judge": "gemini-2.0-flash (1–100 rubric)"
+  },
+  "base": {
+    "file": "/home/zceexl3/ai_accountant/scripts/2.sft/sft_benchmark/base_scores.jsonl",
+    "num_scored": 100,
+    "avg_score": 36.74,
+    "min": 1,
+    "max": 90
+  },
+  "sft": {
+    "file": "/home/zceexl3/ai_accountant/scripts/2.sft/sft_benchmark/sft_scores.jsonl",
+    "num_scored": 100,
+    "avg_score": 77.25,
+    "min": 30,
+    "max": 100
+  }
+}
